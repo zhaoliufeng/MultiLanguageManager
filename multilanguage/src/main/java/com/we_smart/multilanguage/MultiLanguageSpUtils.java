@@ -16,8 +16,6 @@ public class MultiLanguageSpUtils {
     //sp默认key
     private static final String SP_KEY = "sp_key";
     //默认语言key
-    private static final String LANGUAGE_DEFAULT_KEY = "default_key";
-    //默认语言key
     private static final String LANGUAGE_KEY = "language_key";
     //默认语言
     private static Locale mLocaleDefault = Locale.getDefault();
@@ -40,7 +38,13 @@ public class MultiLanguageSpUtils {
         return getString(LANGUAGE_KEY, mLocaleDefault.toString());
     }
 
-    //获取国家
+    /**
+     * 获取国家
+     * Locale(country, language)
+     * 在构造Locale实体时传入完整的country language 才能得到对应的Locale
+     * 不要使用简单的toString()方法
+     * @return 当前语言国家
+     */
     String getCountry(){
         if (getLanguageType().length() > 2){
             return getLanguageType().substring(3, 5);
@@ -48,7 +52,10 @@ public class MultiLanguageSpUtils {
         return "";
     }
 
-    //获取语言
+    /**
+     * 获取语言
+     * @return 当前语言
+     */
     String getLanguage(){
         return getLanguageType().substring(0, 2);
     }
@@ -59,14 +66,6 @@ public class MultiLanguageSpUtils {
      */
     void saveLanguageType(String type){
        saveString(LANGUAGE_KEY, type);
-    }
-
-    /**
-     * 设置默认语言
-     * @param type 需要保存的默认语言
-     */
-    public void setDefaultLanguageType(String type){
-        saveString(LANGUAGE_DEFAULT_KEY, type);
     }
 
     private void saveString(String key, String value){
