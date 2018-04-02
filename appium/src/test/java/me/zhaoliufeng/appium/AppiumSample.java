@@ -1,8 +1,9 @@
-package com.we_smart.test;
+package me.zhaoliufeng.appium;
 
 /**
  * Created by zhaol on 2018/3/29.
  */
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,9 @@ import java.util.concurrent.TimeUnit;
 
 import io.appium.java_client.android.AndroidDriver;
 
-public class AppiumSmple {
+import static junit.framework.Assert.assertEquals;
+
+public class AppiumSample {
 
     private AndroidDriver driver;
 
@@ -38,12 +41,16 @@ public class AppiumSmple {
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         WebElement btn_turn = driver.findElementByAndroidUIAutomator("new UiSelector().text(\"跳转\")");
         btn_turn.click();
+        assertEquals(driver.currentActivity(), ".MainActivity");
         WebElement btn_en = driver.findElementByAndroidUIAutomator("new UiSelector().text(\"英文\")");
         btn_en.click();
         WebElement btn_zh = driver.findElementByAndroidUIAutomator("new UiSelector().text(\"简中\")");
         btn_zh.click();
         WebElement btn_tw = driver.findElementByAndroidUIAutomator("new UiSelector().text(\"繁中\")");
         btn_tw.click();
+        WebElement edt_num = driver.findElementByAndroidUIAutomator("new UiSelector().text(\"请输入数字\")");
+        edt_num.sendKeys("12354");
+//        assertEquals(edt_num.getText(), "12345");
     }
 
     @After

@@ -1,1 +1,1 @@
-include ':app', ':multilanguage'
+include ':app', ':multilanguage', ':appium'
