@@ -3,19 +3,17 @@ package com.we_smart.test;
 /**
  * Created by zhaol on 2018/3/29.
  */
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.TouchAction;
-import io.appium.java_client.android.AndroidDriver;
-import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.Timestamp;
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.remote.DesiredCapabilities;
+import io.appium.java_client.android.AndroidDriver;
 
 public class AppiumSmple {
 
@@ -27,8 +25,8 @@ public class AppiumSmple {
         desiredCapabilities.setCapability("platformName", "Android");
         desiredCapabilities.setCapability("platformVersion", "5.1");
         desiredCapabilities.setCapability("deviceName", "Meizu M3");
-        desiredCapabilities.setCapability("appPackage", "com.ws.mesh.mesh_home");
-        desiredCapabilities.setCapability("appActivity", "com.we_smart.doonne.view.activity.LauncherActivity");
+        desiredCapabilities.setCapability("appPackage", "com.we_smart.test");
+        desiredCapabilities.setCapability("appActivity", ".StartActivity");
 
         URL remoteUrl = new URL("http://localhost:4723/wd/hub");
 
@@ -37,15 +35,15 @@ public class AppiumSmple {
 
     @Test
     public void sampleTest() {
-        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.SECONDS);
-        (new TouchAction(driver)).tap(417, 283).perform();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        (new TouchAction(driver)).tap(490, 507).perform();
-//        (new TouchAction(driver)).tap(336, 594).perform();
-//        (new TouchAction(driver)).tap(529, 566).perform();
-//        (new TouchAction(driver)).tap(501, 698).perform();
-//        (new TouchAction(driver)).tap(417, 1042).perform();
-//        (new TouchAction(driver)).tap(375, 1174).perform();
+        WebElement btn_turn = driver.findElementByAndroidUIAutomator("new UiSelector().text(\"跳转\")");
+        btn_turn.click();
+        WebElement btn_en = driver.findElementByAndroidUIAutomator("new UiSelector().text(\"英文\")");
+        btn_en.click();
+        WebElement btn_zh = driver.findElementByAndroidUIAutomator("new UiSelector().text(\"简中\")");
+        btn_zh.click();
+        WebElement btn_tw = driver.findElementByAndroidUIAutomator("new UiSelector().text(\"繁中\")");
+        btn_tw.click();
     }
 
     @After
