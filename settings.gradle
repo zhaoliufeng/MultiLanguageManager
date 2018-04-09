@@ -1,1 +1,1 @@
-include ':app', ':multilanguage', ':appium'
+include ':app', ':multilanguage', ':appium',  ':speech', 'lansharelib'

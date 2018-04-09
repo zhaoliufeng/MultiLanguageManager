@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.we_smart.speech" >
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application>
+        <meta-data android:name="com.baidu.speech.APP_ID"
+            android:value="11066328" />
+        <meta-data
+            android:name="com.baidu.speech.API_KEY"
+            android:value="nCeU2Lx98GkvYPilFceGZNoy" />
+        <meta-data
+            android:name="com.baidu.speech.SECRET_KEY"
+            android:value="85d85a08b823f74498e49a076b441b82" />
+
+        <service android:name="com.baidu.speech.VoiceRecognitionService" android:exported="false" />
+    </application>
+</manifest>

@@ -50,6 +50,8 @@ public class AppiumSample {
         btn_tw.click();
         WebElement edt_num = driver.findElementByAndroidUIAutomator("new UiSelector().text(\"请输入数字\")");
         edt_num.sendKeys("12354");
+        System.out.print(driver.findElementByAndroidUIAutomator("new UiSelector().text(\"12354\")").getText());
+        driver.hideKeyboard();
 //        assertEquals(edt_num.getText(), "12345");
     }
 

@@ -20,7 +20,7 @@ public class MultiLanguageSpUtils {
     //默认语言
     private static Locale mLocaleDefault = Locale.getDefault();
 
-    MultiLanguageSpUtils(Context context){
+    public MultiLanguageSpUtils(Context context){
         init(context);
     }
 
