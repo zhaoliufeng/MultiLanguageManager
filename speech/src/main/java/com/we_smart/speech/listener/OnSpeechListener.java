@@ -23,8 +23,8 @@ public interface OnSpeechListener {
     //结束说话
     void onEndSpeech();
 
-    //完成
-    void onFinish(String text);
+    //识别完成
+    void onFinish();
 
     //语音唤起成功
     void onWakeup();

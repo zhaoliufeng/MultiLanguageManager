@@ -1,18 +1,20 @@
 package com.we_smart.test;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.we_smart.speech.BaiduSpeech;
 import com.we_smart.speech.SpeechManager;
+import com.we_smart.speech.conts.BaiduSpeechKeyValues;
 import com.we_smart.speech.listener.OnSpeechListener;
 
 public class SpeechActivity extends AppCompatActivity {
 
     private TextView mTvResult;
+    private TextView mTvVolume;
+    private TextView mTvStatus;
     private Button mBtnSpeech;
 
     private SpeechManager speechManager;
@@ -27,6 +29,8 @@ public class SpeechActivity extends AppCompatActivity {
     private void initView() {
         mTvResult = findViewById(R.id.tv_result);
         mBtnSpeech = findViewById(R.id.btn_start_speech);
+        mTvVolume = findViewById(R.id.tv_vol);
+        mTvStatus = findViewById(R.id.tv_status);
 
         mBtnSpeech.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +42,8 @@ public class SpeechActivity extends AppCompatActivity {
         speechManager.setOnSpeechListener(new OnSpeechListener() {
             @Override
             public void onBeginSpeech() {
-                mTvResult.setText("开始识别");
+                mTvStatus.setText("开始识别");
+                mTvResult.setText("正在识别");
             }
 
             @Override
@@ -48,7 +53,9 @@ public class SpeechActivity extends AppCompatActivity {
 
             @Override
             public void onError(String errorDesc, int errorCode) {
-
+                if (errorCode == BaiduSpeechKeyValues.VALUE_NO_NETWORK_CODE){
+                    mTvResult.setText("没有网络");
+                }
             }
 
             @Override
@@ -58,22 +65,22 @@ public class SpeechActivity extends AppCompatActivity {
 
             @Override
             public void onVolumeChange(int volume) {
-
+                mTvVolume.setText(volume + "");
             }
 
             @Override
             public void onEndSpeech() {
-
+                mTvStatus.setText("识别结束");
             }
 
             @Override
-            public void onFinish(String text) {
-
+            public void onFinish() {
+                mTvStatus.setText("识别结束");
             }
 
             @Override
             public void onWakeup() {
-
+                mTvStatus.setText("唤起成功");
             }
         });
     }

@@ -3,6 +3,7 @@ package com.we_smart.speech;
 import android.content.Context;
 
 import com.we_smart.speech.listener.OnSpeechListener;
+import com.we_smart.speech.speechs.BaiduSpeech;
 
 /**
  * Created by zhaol on 2018/4/9.
@@ -17,7 +18,7 @@ public class SpeechManager {
     //初始化
     public SpeechManager(Context context) {
         mContext = context;
-        baiduSpeech = new BaiduSpeech(context);
+        baiduSpeech = new BaiduSpeech(context, true);
         baiduSpeech.setOnSpeechListener(new OnSpeechListener() {
             @Override
             public void onBeginSpeech() {
@@ -50,8 +51,8 @@ public class SpeechManager {
             }
 
             @Override
-            public void onFinish(String text) {
-                mOnSpeechListener.onFinish(text);
+            public void onFinish() {
+                mOnSpeechListener.onFinish();
             }
 
             @Override
