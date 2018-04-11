@@ -32,7 +32,7 @@ dependencies {
 }
 
 task makeJar(type: Copy) {
-    delete 'build/libs/test.jar'
+    delete 'build/libs/lanshare.jar'
     from('build/intermediates/bundles/release/')
     into('build/libs/')
     include('classes.jar')

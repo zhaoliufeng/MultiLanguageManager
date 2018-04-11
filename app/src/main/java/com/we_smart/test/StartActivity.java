@@ -25,4 +25,8 @@ public class StartActivity  extends AppCompatActivity {
     public void onSpeechClick(View view) {
         startActivity(new Intent(this, SpeechActivity.class));
     }
+
+    public void onPermissionClick(View view) {
+        startActivity(new Intent(this, PermissionActivity.class));
+    }
 }

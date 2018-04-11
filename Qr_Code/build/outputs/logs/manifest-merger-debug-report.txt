@@ -1,0 +1,71 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:2:1-20:12
+	package
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:2:11-45
+		INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:2:1-20:12
+		INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:2:1-20:12
+		INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:3:11-69
+uses-permission#android.permission.VIBRATE
+ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:5:5-65
+	android:name
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:5:22-63
+uses-permission#android.permission.CAMERA
+ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:6:5-64
+	android:name
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:6:22-62
+uses-feature#android.hardware.camera
+ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:7:5-59
+	android:name
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:7:19-57
+uses-feature#android.hardware.camera.autofocus
+ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:8:5-69
+	android:name
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:8:19-67
+application
+ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:10:5-18:19
+	android:supportsRtl
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:13:9-35
+	android:label
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:12:9-41
+	android:allowBackup
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:11:9-35
+activity#com.we_smart.zxing.activity.CaptureActivity
+ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:14:9-17:71
+	android:screenOrientation
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:16:13-49
+	android:configChanges
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:15:13-43
+	android:theme
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:17:13-69
+	android:name
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml:14:19-77
+uses-sdk
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+		ADDED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\zhaol\Desktop\Test\Qr_Code\src\main\AndroidManifest.xml

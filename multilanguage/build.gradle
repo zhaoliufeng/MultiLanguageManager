@@ -29,3 +29,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
+task makeJar(type: Copy) {
+    delete 'build/libs/multilanguage.jar'
+    from('build/intermediates/bundles/release/')
+    into('build/libs/')
+    include('classes.jar')
+    rename('classes.jar', 'multilanguage.jar')
+}
+
+makeJar.dependsOn(build)

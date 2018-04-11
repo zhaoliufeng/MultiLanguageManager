@@ -17,12 +17,11 @@ public class SpeechActivity extends AppCompatActivity {
     private TextView mTvStatus;
     private Button mBtnSpeech;
 
-    private SpeechManager speechManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech);
-        speechManager = new SpeechManager(this);
+        SpeechManager.getInstance().initWithBaidu(this);
         initView();
     }
 
@@ -35,11 +34,11 @@ public class SpeechActivity extends AppCompatActivity {
         mBtnSpeech.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                speechManager.startSpeechRecog();
+                SpeechManager.getInstance().startSpeechRecog();
             }
         });
 
-        speechManager.setOnSpeechListener(new OnSpeechListener() {
+        SpeechManager.getInstance().setOnSpeechListener(new OnSpeechListener() {
             @Override
             public void onBeginSpeech() {
                 mTvStatus.setText("开始识别");
@@ -83,5 +82,11 @@ public class SpeechActivity extends AppCompatActivity {
                 mTvStatus.setText("唤起成功");
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SpeechManager.getInstance().destroy();
     }
 }

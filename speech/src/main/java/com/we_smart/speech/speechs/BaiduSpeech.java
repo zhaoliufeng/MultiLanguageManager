@@ -23,17 +23,12 @@ import static com.we_smart.speech.conts.BaiduSpeechKeyValues.*;
  * Created by zhaol on 2018/4/9.
  */
 
-public class BaiduSpeech implements EventListener {
+public class BaiduSpeech extends Speech implements EventListener {
     //语音识别
     private EventManager asr;
     //语音唤醒
     private EventManager wakeup;
-    //上下文件对象
-    private Context mContext;
-    //语音回调
-    private OnSpeechListener mOnSpeechListener;
 
-    private String appId;
     private String appKey;
     private String secretKey;
 
@@ -42,48 +37,28 @@ public class BaiduSpeech implements EventListener {
      * @param context 上下文
      */
     public BaiduSpeech(Context context) {
-        this.mContext = context;
-        initSpeech();
+        super(context);
     }
-
-    /**
-     * @param context 上下文
-     * @param openWakeUp 打开唤醒
-     */
-    public BaiduSpeech(Context context, boolean openWakeUp) {
-       this(context);
-        if (openWakeUp)
-            openWakeup();
-    }
-
 
     /**
      * 动态设置语音识别appid
-     * @param context 上下文
-     * @param appId 语音识别AppID
-     * @param appKey AppKey
+     *
+     * @param context   上下文
+     * @param appId     语音识别AppID
+     * @param appKey    AppKey
      * @param secretKey SecretKey
      */
     public BaiduSpeech(Context context, String appId, String appKey, String secretKey) {
-        this(context);
-        this.appId = appId;
+        super(context, appId);
         this.appKey = appKey;
         this.secretKey = secretKey;
     }
 
     /**
-     * 默认打开语音唤醒
-     */
-    public BaiduSpeech(Context context, String appId, String appKey, String secretKey, boolean openWakeUp) {
-        this(context, appId, appKey, secretKey);
-        if (openWakeUp)
-            openWakeup();
-    }
-
-    /**
      * 初始化百度语音
      */
-    private void initSpeech() {
+    @Override
+    protected void initSpeech() {
         asr = EventManagerFactory.create(mContext, "asr");
         asr.registerListener(this);
 
@@ -94,11 +69,9 @@ public class BaiduSpeech implements EventListener {
     /**
      * 开始识别语音
      */
+    @Override
     public void startSpeechRecog() {
         Map<String, Object> params = new LinkedHashMap<>();
-        String event = SpeechConstant.ASR_START;
-
-        params.put(SpeechConstant.ACCEPT_AUDIO_VOLUME, false);
 
         if (appId != null) {
             params.put(SpeechConstant.APP_ID, appId);
@@ -107,26 +80,20 @@ public class BaiduSpeech implements EventListener {
         }
         params.put(SpeechConstant.ACCEPT_AUDIO_VOLUME, true);
         String json = new JSONObject(params).toString();
-        asr.send(event, json, null, 0, 0);
+        asr.send(SpeechConstant.ASR_START, json, null, 0, 0);
         Log.i("DataPrint", "输入参数：" + json);
     }
 
     /**
      * 打开唤醒功能
      */
-    public void openWakeup() {
+    private void openWakeup() {
         Map<String, Object> params = new TreeMap<>();
-
-        params.put(SpeechConstant.ACCEPT_AUDIO_VOLUME, false);
         params.put(SpeechConstant.WP_WORDS_FILE, "assets:///WakeUp.bin");
 
         String json = new JSONObject(params).toString();
         wakeup.send(SpeechConstant.WAKEUP_START, json, null, 0, 0);
         Log.i("DataPrint", "输入参数：" + json);
-    }
-
-    public void setOnSpeechListener(OnSpeechListener onSpeechListener) {
-        this.mOnSpeechListener = onSpeechListener;
     }
 
     @Override
@@ -161,14 +128,16 @@ public class BaiduSpeech implements EventListener {
                 //识别结束（可能含有错误信息）
                 case SpeechConstant.CALLBACK_EVENT_ASR_FINISH:
                     //根据错误码判断有没有说话
-                    switch (jsonObject.getInt(KEY_ERROR_CODE)){
-                        case VALUE_NO_SPEECH_CODE:
+                    switch (jsonObject.getInt(KEY_ERROR)) {
+                        case VALUE_SUCCESS:
+                            break;
+                        case VALUE_ERROR_AUDIO:
+                        case VALUE_ERROR_NO_RESULT:
                             mOnSpeechListener.onNotSpeech();
                             Log.i("DataPrint", "没有说话");
                             break;
-                        case VALUE_NO_NETWORK_CODE:
-                            mOnSpeechListener.onError(jsonObject.getString(KEY_ERROR_DESC), VALUE_NO_NETWORK_CODE);
-                            Log.i("DataPrint", "网络异常");
+                       default:
+                            mOnSpeechListener.onError(jsonObject.getString(KEY_ERROR_DESC), jsonObject.getInt(KEY_ERROR_CODE));
                             break;
                     }
                     mOnSpeechListener.onFinish();
@@ -176,14 +145,8 @@ public class BaiduSpeech implements EventListener {
                     break;
                 //音量回调
                 case SpeechConstant.CALLBACK_EVENT_ASR_VOLUME:
-                    try {
-                        mOnSpeechListener.onVolumeChange(jsonObject.getInt(KEY_VOLUME_PERCENT));
-                        Log.i("DataPrint_Vol", String.valueOf(jsonObject.getInt(KEY_VOLUME)));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        //第一条json带有pid信息
-                        Log.i("DataPrint", "IS PID Block");
-                    }
+                    mOnSpeechListener.onVolumeChange(jsonObject.getInt(KEY_VOLUME_PERCENT));
+                    Log.i("DataPrint_Vol", String.valueOf(jsonObject.getInt(KEY_VOLUME)));
                     break;
                 //识别结束 释放资源
                 case SpeechConstant.CALLBACK_EVENT_ASR_EXIT:
@@ -205,51 +168,14 @@ public class BaiduSpeech implements EventListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        String logTxt = "name: " + name;
-//
-//        if (params != null && !params.isEmpty()) {
-//            logTxt += " ;params :" + params;
-//        }
-//        if (name.equals(SpeechConstant.CALLBACK_EVENT_ASR_PARTIAL)) {
-//            if (params.contains("\"nlu_result\"")) {
-//                if (length > 0 && data.length > 0) {
-//                    logTxt += ", 语义解析结果：" + new String(data, offset, length);
-//                }
-//            }
-//        } else if (data != null) {
-//            logTxt += " ;data length=" + data.length;
-//        }
-//        if (params != null) {
-//            try {
-//                JSONObject jsonObject = new JSONObject(params);
-//                //判断是不是唤起指令
-//                try {
-//                    String desc = (String) jsonObject.get("errorDesc");
-//                    if (desc.equals("wakeup success")) {
-//                        mOnSpeechListener.onWakeup();
-//                        startSpeechRecog();
-//                    }
-//                } catch (JSONException e) {
-//                    try {
-//                        int noMatch = (int) jsonObject.get("sub_error");
-//                        if (noMatch == 7001 || noMatch == 3101) {
-//                            mOnSpeechListener.onNotSpeech();
-//                        }
-//                    } catch (JSONException je) {
-//                        String result = (String) jsonObject.get("result_type");
-//                        if (result != null) {
-//                            //检测到说话 并显示最佳的识别语句
-//                            if (result.equals("final_result")) {
-//                                mOnSpeechListener.onResult((String) jsonObject.get("best_result"));
-//                            }
-//                        }
-//                    }
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
+    }
 
-//        Log.i("DataPrint", logTxt);
+    /**
+     * 释放引擎
+     */
+    @Override
+    public void release() {
+        asr.unregisterListener(this);
+        wakeup.unregisterListener(this);
     }
 }

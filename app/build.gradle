@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "com.we_smart.test"
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -32,4 +32,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation project(path: ':multilanguage')
     implementation project(path: ':speech')
+    compile project(path: ':permissions')
 }

@@ -9,7 +9,7 @@ import java.util.Locale;
  * 多语言缓存
  */
 
-public class MultiLanguageSpUtils {
+class MultiLanguageSpUtils {
 
     private static SharedPreferences mSharePreferences;
 
@@ -20,7 +20,7 @@ public class MultiLanguageSpUtils {
     //默认语言
     private static Locale mLocaleDefault = Locale.getDefault();
 
-    public MultiLanguageSpUtils(Context context){
+    MultiLanguageSpUtils(Context context){
         init(context);
     }
 

@@ -26,5 +26,19 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
     implementation files('libs/bdasr_V3_20180320_9066860.jar')
+    implementation files('libs/Msc.jar')
+    implementation files('libs/Sunflower.jar')
 }
+
+
+task makeJar(type: Copy) {
+    delete 'build/libs/speech.jar'
+    from('build/intermediates/bundles/release/')
+    into('build/libs/')
+    include('classes.jar')
+    rename('classes.jar', 'speech.jar')
+}
+
+makeJar.dependsOn(build)
