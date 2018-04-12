@@ -2,7 +2,6 @@ package com.we_smart.permissions;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 
 import java.util.ArrayList;
@@ -75,7 +73,7 @@ public class PermissionsManager {
                 .setPositiveButton("立即开启", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startRequestPermission(permissions);
+                        startRequestPermissions(permissions);
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -118,7 +116,7 @@ public class PermissionsManager {
     /**
      * 开始请求权限
      */
-    public void startRequestPermission(String... permissions) {
+    public void startRequestPermissions(String... permissions) {
         ActivityCompat.requestPermissions(mContext, permissions, REQUEST_CODE);
     }
 
