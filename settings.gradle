@@ -1,1 +1,1 @@
-include ':app', ':multilanguage', ':appium',  ':speech', ':permissions', 'lansharelib', 'Qr_Code'
+include ':app', ':multilanguage', ':appium',  ':speech', ':permissions', ':customview', 'lansharelib', 'Qr_Code', 'customview'
