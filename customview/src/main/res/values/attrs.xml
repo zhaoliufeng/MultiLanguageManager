@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomSeekBar">
+        <attr name="thumb_color" format="color"/>
+        <attr name="thumb_radius" format="dimension"/>
+        <attr name="process_color" format="color"/>
+        <attr name="process_bg_color" format="color"/>
+        <attr name="process_height" format="dimension"/>
+        <attr name="process_bg_height" format="dimension"/>
+    </declare-styleable>
+</resources>

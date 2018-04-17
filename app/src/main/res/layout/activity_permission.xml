@@ -2,30 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:background="#EEE"
     android:orientation="vertical">
 
-    <com.we_smart.customview.CustomLayout
-        android:layout_marginTop="10dp"
+    <com.we_smart.customview.seekbar.CustomSeekBar
+        android:id="@+id/seek_bar"
+        app:process_bg_color="#fff"
+        app:process_color="#000"
+        app:thumb_color="#CBCBCB"
+        app:process_height="6dp"
+        app:process_bg_height="6dp"
+        app:thumb_radius="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" />
 
-        <com.we_smart.customview.CustomView
-            android:layout_width="110dp"
-            android:layout_height="120dp"
-            android:background="@color/colorPrimary" />
-
-        <com.we_smart.customview.CustomView
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="160dp"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:background="@color/colorAccent" />
-
-        <com.we_smart.customview.CustomSeekBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark" />
-    </com.we_smart.customview.CustomLayout>
-
+    <Button
+        android:id="@+id/btn_set_process"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Random"
+        android:textAllCaps="false" />
 
 </LinearLayout>
