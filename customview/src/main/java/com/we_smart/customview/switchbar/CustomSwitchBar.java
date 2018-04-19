@@ -1,4 +1,4 @@
-package com.we_smart.customview;
+package com.we_smart.customview.switchbar;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -16,8 +16,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 
+import com.we_smart.customview.R;
+
 /**
- * Created by zhaol on 2018/4/19.
+ *  Created by zhaol on 2018/4/19.
  */
 
 public class CustomSwitchBar extends View implements View.OnTouchListener {
@@ -48,8 +50,10 @@ public class CustomSwitchBar extends View implements View.OnTouchListener {
     private float mThumbEndX;     //滑块停止X坐标
 
     /**************    文字   ***************/
-    private Paint mTextPaint;
+    private Paint mLeftTextPaint;
+    private Paint mRightTextPaint;
     private int mTextColor;
+    private int mTextSelectColor;
     private float mTextSize;
     private String mLeftText;
     private String mRightText;
@@ -108,10 +112,15 @@ public class CustomSwitchBar extends View implements View.OnTouchListener {
         mThumbPaint.setAntiAlias(true);
         mThumbPaint.setColor(mThumbColor);
 
-        mTextPaint = new Paint();
-        mTextPaint.setAntiAlias(true);
-        mTextPaint.setColor(mTextColor);
-        mTextPaint.setTextSize(mTextSize);
+        mLeftTextPaint = new Paint();
+        mLeftTextPaint.setAntiAlias(true);
+        mLeftTextPaint.setColor(mTextSelectColor);
+        mLeftTextPaint.setTextSize(mTextSize);
+
+        mRightTextPaint = new Paint();
+        mRightTextPaint.setAntiAlias(true);
+        mRightTextPaint.setColor(mTextColor);
+        mRightTextPaint.setTextSize(mTextSize);
 
         this.setOnTouchListener(this);
     }
@@ -126,7 +135,8 @@ public class CustomSwitchBar extends View implements View.OnTouchListener {
         mBgHeight = (int) a.getDimension(R.styleable.CustomSwitchBar_bg_height, mHeight);
         mThumbMargin = (int) a.getDimension(R.styleable.CustomSwitchBar_thumb_margin, 0);
         mThumbColor = a.getColor(R.styleable.CustomSwitchBar_switch_thumb_color, Color.WHITE);
-        mTextColor = a.getColor(R.styleable.CustomSwitchBar_text_color, Color.BLACK);
+        mTextColor = a.getColor(R.styleable.CustomSwitchBar_text_color, Color.WHITE);
+        mTextSelectColor = a.getColor(R.styleable.CustomSwitchBar_text_select_color, Color.BLACK);
         mTextSize = a.getDimension(R.styleable.CustomSwitchBar_text_size, sp2px(15));
         mLeftText = a.getString(R.styleable.CustomSwitchBar_text_left);
         mRightText = a.getString(R.styleable.CustomSwitchBar_text_right);
@@ -194,25 +204,31 @@ public class CustomSwitchBar extends View implements View.OnTouchListener {
     }
 
     private void drawRightText(Canvas canvas) {
-        float textWidth = mTextPaint.measureText(mRightText);
+        mRightTextPaint.setColor(mThumbX > mWidth / 2
+                ? mTextSelectColor : mTextColor);
+
+        float textWidth = mRightTextPaint.measureText(mRightText);
         float x = mThumbEndX - textWidth / 2;
 
-        Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
+        Paint.FontMetrics metrics = mRightTextPaint.getFontMetrics();
         //metrics.ascent为负数
         float dy = -(metrics.descent + metrics.ascent) / 2;
         float y = mHeight / 2 + dy;
-        canvas.drawText(mRightText, x, y, mTextPaint);
+        canvas.drawText(mRightText, x, y, mRightTextPaint);
     }
 
     private void drawLeftText(Canvas canvas) {
-        float textWidth = mTextPaint.measureText(mLeftText);
+        mLeftTextPaint.setColor(mThumbX < mWidth / 2
+                ? mTextSelectColor : mTextColor);
+
+        float textWidth = mLeftTextPaint.measureText(mLeftText);
         float x = mThumbStartX - textWidth / 2;
 
-        Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
+        Paint.FontMetrics metrics = mLeftTextPaint.getFontMetrics();
         //metrics.ascent为负数
         float dy = -(metrics.descent + metrics.ascent) / 2;
         float y = mHeight / 2 + dy;
-        canvas.drawText(mLeftText, x, y, mTextPaint);
+        canvas.drawText(mLeftText, x, y, mLeftTextPaint);
     }
 
     private void drawCenterPoint(Canvas canvas) {
@@ -283,6 +299,7 @@ public class CustomSwitchBar extends View implements View.OnTouchListener {
                     } else {
                         mThumbX = x;
                     }
+
                     invalidate();
                 }
                 break;
@@ -296,11 +313,6 @@ public class CustomSwitchBar extends View implements View.OnTouchListener {
                 break;
         }
         return true;
-    }
-
-    private void setThumbX(float x) {
-        mThumbX = x;
-        postInvalidate();
     }
 
     private void setThumbWithAnimation(boolean isLeft) {

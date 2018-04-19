@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SpeechActivity" />
-        <activity android:name=".PermissionActivity"/>
+        <activity android:name=".PermissionActivity" />
+        <activity android:name=".SqlActivity"></activity>
     </application>
 
 </manifest>

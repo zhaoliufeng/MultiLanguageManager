@@ -39,13 +39,14 @@
         android:text="Random"
         android:textAllCaps="false" />
 
-    <com.we_smart.customview.CustomSwitchBar
+    <com.we_smart.customview.switchbar.CustomSwitchBar
         app:stroke_width="1dp"
         app:thumb_margin="2dp"
         app:text_size="15sp"
         app:text_left="彩光模式"
         app:text_right="暖光模式"
         app:stroke_color="#6fff"
+        app:text_color="@color/colorAccent"
         android:layout_width="300dp"
         android:layout_height="40dp" />
 
