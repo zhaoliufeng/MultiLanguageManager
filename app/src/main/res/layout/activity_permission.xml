@@ -4,18 +4,31 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
-    android:background="#EEE"
+    android:background="#000"
     android:orientation="vertical">
+
+    <View
+        android:id="@+id/view_color"
+        android:layout_marginBottom="20dp"
+        android:background="@color/colorPrimary"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
+    <TextView
+        android:id="@+id/tv_process"
+        android:text="0%"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <com.we_smart.customview.seekbar.CustomSeekBar
         android:id="@+id/seek_bar"
         app:process_bg_color="#fff"
-        app:process_color="#000"
+        app:process_color="#6000"
         app:thumb_color="#CBCBCB"
-        app:process_height="6dp"
-        app:process_bg_height="6dp"
+        app:process_bg_height="10dp"
+        app:process_height="10dp"
         app:thumb_radius="10dp"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content" />
 
     <Button
@@ -25,5 +38,15 @@
         android:layout_marginTop="20dp"
         android:text="Random"
         android:textAllCaps="false" />
+
+    <com.we_smart.customview.CustomSwitchBar
+        app:stroke_width="1dp"
+        app:thumb_margin="2dp"
+        app:text_size="15sp"
+        app:text_left="彩光模式"
+        app:text_right="暖光模式"
+        app:stroke_color="#6fff"
+        android:layout_width="300dp"
+        android:layout_height="40dp" />
 
 </LinearLayout>

@@ -7,5 +7,21 @@
         <attr name="process_bg_color" format="color"/>
         <attr name="process_height" format="dimension"/>
         <attr name="process_bg_height" format="dimension"/>
+        <attr name="process_bg_start_color" format="color"/>
+        <attr name="process_bg_center_color" format="color"/>
+        <attr name="process_bg_end_color" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="CustomSwitchBar">
+        <attr name="bg_height" format="dimension"/>
+        <attr name="stroke_color" format="color"/>
+        <attr name="stroke_width" format="dimension"/>
+        <attr name="switch_thumb_color" format="color"/>
+        <attr name="thumb_margin" format="dimension"/>
+        <attr name="text_size" format="dimension"/>
+        <attr name="text_color" format="color"/>
+        <attr name="text_select_color" format="dimension"/>
+        <attr name="text_left" format="string"/>
+        <attr name="text_right" format="string"/>
     </declare-styleable>
 </resources>

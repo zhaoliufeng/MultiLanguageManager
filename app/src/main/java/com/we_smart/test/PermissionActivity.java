@@ -1,6 +1,7 @@
 package com.we_smart.test;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.LinearGradient;
@@ -14,12 +15,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.we_smart.customview.seekbar.CustomSeekBar;
 import com.we_smart.customview.seekbar.OnSeekBarDragListener;
 import com.we_smart.permissions.PermissionsListener;
 import com.we_smart.permissions.PermissionsManager;
+import com.we_smart.test.model.Color;
 
 import java.util.Random;
 
@@ -33,13 +36,19 @@ public class PermissionActivity extends AppCompatActivity {
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private CustomSeekBar seekBar;
     private Button btnRandom;
+    private View colorView;
+    private TextView tvProcess;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission);
-        seekBar = (CustomSeekBar) findViewById(R.id.seek_bar);
+        seekBar = findViewById(R.id.seek_bar);
         btnRandom = findViewById(R.id.btn_set_process);
+        colorView = findViewById(R.id.view_color);
+        tvProcess = findViewById(R.id.tv_process);
+
+        final Color color = new Color();
         seekBar.setOnSeekBarDragListener(new OnSeekBarDragListener() {
             @Override
             public void startDrag() {
@@ -49,6 +58,34 @@ public class PermissionActivity extends AppCompatActivity {
             @Override
             public void dragging(int process) {
                 Log.i(CustomSeekBar.TAG, String.format("Process %d", process));
+                tvProcess.setText(String.format("%d%%", process));
+                if (process <= 20) {
+                    //ff0
+                    color.r = 255;
+                    color.g = (int) (12.75 * process);
+                    color.b = 0;
+                } else if (process <= 40) {
+                    //0f0
+                    color.r = (int) (255 - (12.75 * (process - 20)));
+                    color.g = 255;
+                    color.b = 0;
+                } else if (process <= 60) {
+                    //0ff
+                    color.r = 0;
+                    color.g = 255;
+                    color.b = (int) (12.75 * (process - 40));
+                } else if (process <= 80) {
+                    //00f
+                    color.r = 0;
+                    color.g = (int) (255 - 12.75 * (process - 60));
+                    color.b = 255;
+                } else if (process <= 100) {
+                    //f0f
+                    color.r = (int) Math.round(12.75 * (process - 80));
+                    color.g = 0;
+                    color.b = 255;
+                }
+                colorView.setBackgroundColor(android.graphics.Color.argb(255, color.r, color.g, color.b));
             }
 
             @Override
@@ -65,8 +102,12 @@ public class PermissionActivity extends AppCompatActivity {
                 seekBar.setProcessWithAnimation(random);
             }
         });
-//        int[] doughnutColors = {0xfffffefc, 0xffffdc92, 0xffffb61a};
-//        seekBar.setProcessBgShader(new LinearGradient(getMeasuredWidth() / 2, 0, getMeasuredWidth() / 2, getMeasuredHeight(), doughnutColors, null, Shader.TileMode.CLAMP));
+        int[] coloursColors = new int[]{
+                0xFFFF0000, 0xFFFF7F00, 0xFFFFFF00, 0xFF7FFF00,
+                0xFF00FF00, 0xFF00FF7F, 0xFF00FFFF, 0xFF007FFF,
+                0xFF0000FF, 0xFF7F00FF, 0xFFFF00FF, 0xFFFF007F,
+                0xFFFF0000};
+        seekBar.setProcessLinearBgShader(coloursColors);
         permissionsManager = new PermissionsManager(this, permissions);
         permissionsManager.checkPermissions(new PermissionsListener() {
 

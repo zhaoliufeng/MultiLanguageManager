@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -17,7 +18,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.we_smart.customview.R;
 
 /**
- * Created by zhaol on 2018/4/16.
+ *  Created by zhaol on 2018/4/16.
  */
 
 public class CustomSeekBar extends View implements View.OnTouchListener {
@@ -96,8 +97,8 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
         mThumbColor = a.getColor(R.styleable.CustomSeekBar_thumb_color, Color.GRAY);
         mProcessColor = a.getColor(R.styleable.CustomSeekBar_process_color, Color.BLACK);
         mProcessBgColor = a.getColor(R.styleable.CustomSeekBar_process_bg_color, Color.WHITE);
-        mProcessHeight = (int) a.getDimension(R.styleable.CustomSeekBar_process_height, DEFAULT_HEIGHT/2);
         mProcessBgHeight = (int) a.getDimension(R.styleable.CustomSeekBar_process_bg_height, DEFAULT_HEIGHT/2);
+        mProcessHeight = (int) a.getDimension(R.styleable.CustomSeekBar_process_height, mProcessBgHeight);
         mThumbWidth = (int) a.getDimension(R.styleable.CustomSeekBar_thumb_radius, DEFAULT_HEIGHT/2) * 2;
 
         mThumbX = mThumbWidth / 2;
@@ -183,6 +184,7 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
         rectF.right = mWidth - mThumbWidth / 2;
         rectF.bottom = mHeight / 2 + mProcessBgHeight / 2;
         int radius = mProcessBgHeight / 2;
+
         canvas.drawRoundRect(rectF, radius, radius, mProcessBgPaint);
     }
 
@@ -246,7 +248,7 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
                 mSeekBarDragListener.dragging(mCurrProcess);
                 break;
             case MotionEvent.ACTION_UP:
-                mSeekBarDragListener.stopDragging((int) mThumbX);
+                mSeekBarDragListener.stopDragging(mCurrProcess);
                 break;
         }
         return true;
@@ -269,6 +271,7 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
             this.mCurrProcess = process;
             this.mThumbX = (mCurrProcess / 100.0f) * (mProcessEndX - mProcessStartX) + mProcessStartX;
             invalidate();
+            mSeekBarDragListener.stopDragging(mCurrProcess);
         }
     }
 
@@ -289,8 +292,10 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
                 public void onAnimationUpdate(ValueAnimator animation) {
                     mThumbX = (float) animation.getAnimatedValue();
                     postInvalidate();
+                    mSeekBarDragListener.dragging((int) ((mThumbX - mProcessStartX)/(mProcessEndX - mProcessStartX) * 100));
                 }
             });
+            mSeekBarDragListener.stopDragging(this.mCurrProcess);
         }
     }
 
@@ -312,8 +317,13 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
         invalidate();
     }
 
-    public void setProcessBgShader(Shader shader){
-        this.mProcessBgPaint.setShader(shader);
+    public void setProcessLinearBgShader(int[] doughnutColors){
+        this.mProcessBgPaint.setShader(new LinearGradient(
+                mProcessStartX,
+                mHeight / 2 - mProcessHeight / 2,
+                mProcessEndX,
+                mHeight / 2 + mProcessBgHeight / 2,
+                doughnutColors, null, Shader.TileMode.CLAMP));
         invalidate();
     }
 
