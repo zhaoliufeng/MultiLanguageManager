@@ -17,7 +17,7 @@ public class DBHelper {
     private static SQLiteOpenHelper mOpenHelper;
     private static DBHelper mInstance;
 
-    public static void initDBHelper(SQLiteOpenHelper openHelper){
+    public void initDBHelper(SQLiteOpenHelper openHelper){
         mOpenHelper = openHelper;
     }
 
@@ -35,8 +35,8 @@ public class DBHelper {
 
     //打开获取数据库
     public synchronized SQLiteDatabase openDatabase(){
-        if (!mDataBaseFree.get()){
-            mDataBaseFree.set(true);
+        if (mDataBaseFree.get()){
+            mDataBaseFree.set(false);
             mDatabase = mOpenHelper.getWritableDatabase();
         }
         return mDatabase;
@@ -44,8 +44,8 @@ public class DBHelper {
 
     //关闭数据库
     public synchronized void closeDatabase(){
-        if (mDataBaseFree.get()){
-            mDataBaseFree.set(false);
+        if (!mDataBaseFree.get()){
+            mDataBaseFree.set(true);
             mDatabase.close();
         }
     }

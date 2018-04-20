@@ -8,9 +8,11 @@ import com.we_smart.sqldao.Annotation.DBFiled;
 
 public class TestBean {
     @DBFiled(isPrimary = true)
-    public int id;
+    public String id;
     @DBFiled()
     public String name;
+    @DBFiled()
+    public boolean boo;
 
     public int unUseFiled;
 }

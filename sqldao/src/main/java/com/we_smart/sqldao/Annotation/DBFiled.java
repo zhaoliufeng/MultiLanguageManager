@@ -13,5 +13,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 
 public @interface DBFiled {
+    //是否是主键
     boolean isPrimary() default false;
+    //是否是长文本
+    boolean isText() default false;
 }

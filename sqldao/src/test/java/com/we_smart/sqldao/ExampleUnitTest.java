@@ -9,8 +9,9 @@ public class ExampleUnitTest {
         String sql = SqlBuilder.getInstance().createTable(TestBean.class);
         TestBean bean = new TestBean();
         System.out.println(sql);
-        bean.id = 1;
+        bean.id = "1";
         bean.name = "aa";
+        bean.boo = true;
         System.out.println(SqlBuilder.getInstance().insertObject(bean));
         System.out.println(SqlBuilder.getInstance().deleteObject(bean));
         System.out.println(SqlBuilder.getInstance().updateObject(bean));

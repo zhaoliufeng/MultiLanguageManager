@@ -29,4 +29,8 @@ public class StartActivity  extends AppCompatActivity {
     public void onPermissionClick(View view) {
         startActivity(new Intent(this, PermissionActivity.class));
     }
+
+    public void onSQLClick(View view) {
+        startActivity(new Intent(this, SqlActivity.class));
+    }
 }

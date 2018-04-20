@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBOpenHelper extends SQLiteOpenHelper {
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 3;
 
     public DBOpenHelper(Context context, String name) {
         super(context, name, null, VERSION);
@@ -23,6 +23,15 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        switch (oldVersion){
+            case 1:
+                String sql_upgrade = "alter table SqlTestBean add groupId integer";
+                db.execSQL(sql_upgrade);
+                break;
+            case 2:
+                sql_upgrade = "alter table SqlTestBean add boo Boolean";
+                db.execSQL(sql_upgrade);
+                break;
+        }
     }
 }
