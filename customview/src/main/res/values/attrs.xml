@@ -24,4 +24,8 @@
         <attr name="text_left" format="string"/>
         <attr name="text_right" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="ThemeImageView">
+        <attr name="res_name" format="string"/>
+    </declare-styleable>
 </resources>

@@ -33,6 +33,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation project(path: ':multilanguage')
+    compile 'org.greenrobot:greendao:3.2.0'
     implementation project(path: ':speech')
     compile project(path: ':permissions')
     compile project(path: ':customview')

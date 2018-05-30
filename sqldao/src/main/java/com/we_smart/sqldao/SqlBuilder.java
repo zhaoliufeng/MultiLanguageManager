@@ -1,5 +1,8 @@
 package com.we_smart.sqldao;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.we_smart.sqldao.Annotation.DBFiled;
 
 import java.lang.reflect.Field;
@@ -37,6 +40,9 @@ class SqlBuilder {
                 if (field.getAnnotation(DBFiled.class).isPrimary()) {
                     sb.append(" ").append("PRIMARY KEY");
                 }
+                if (field.getAnnotation(DBFiled.class).isAutoIncrement()) {
+                    sb.append(" ").append("AUTOINCREMENT");
+                }
                 sb.append(",");
             }
         }
@@ -46,45 +52,55 @@ class SqlBuilder {
         return sb.toString();
     }
 
-    //生成插入数据sql语句
-    String insertObject(Object obj) {
+    boolean insertObject(Object obj, SQLiteDatabase database) {
+        long row;
         try {
+            String tableName = obj.getClass().getSimpleName();
             Field fields[] = obj.getClass().getFields();
-            StringBuilder sb = new StringBuilder();
-            sb.append(String.format("INSERT INTO %s VALUES(", obj.getClass().getSimpleName()));
+            ContentValues contentValues = new ContentValues();
             for (Field field : fields) {
                 if (field.isAnnotationPresent(DBFiled.class)) {
-                    sb.append(getValueAppend(field, obj)).append(",");
+                    if (field.getAnnotation(DBFiled.class).isAutoIncrement()) {
+                        continue;
+                    }
+                    putValues(contentValues, obj, field);
                 }
             }
-            //删除最后一个多余的，
-            sb.deleteCharAt(sb.length() - 1);
-            sb.append(")");
-            return sb.toString();
+            row = database.insert(tableName, null, contentValues);
+            return row != -1;
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return "";
+        return false;
+    }
+
+    boolean updateObject(Object obj, SQLiteDatabase database,String[] whereKey, String[] whereValue) {
+        long row;
+        try {
+            String tableName = obj.getClass().getSimpleName();
+            Field fields[] = obj.getClass().getFields();
+            ContentValues contentValues = new ContentValues();
+            for (Field field : fields) {
+                if (field.isAnnotationPresent(DBFiled.class)) {
+                    if (field.getAnnotation(DBFiled.class).isAutoIncrement() ||
+                            field.getAnnotation(DBFiled.class).isPrimary()) {
+                        continue;
+                    }
+                    putValues(contentValues, obj, field);
+                }
+            }
+            row = database.update(tableName, contentValues, getSelection(whereKey), whereValue);
+            return row != -1;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     //生成删除数据sql语句 删除的关键字是primary key
-    String deleteObject(Object obj) {
-        try {
-            Field fields[] = obj.getClass().getFields();
-            StringBuilder sb = new StringBuilder();
-            sb.append(String.format("DELETE FROM %s WHERE ", obj.getClass().getSimpleName()));
-            for (Field field : fields) {
-                if (field.isAnnotationPresent(DBFiled.class)) {
-                    if (field.getAnnotation(DBFiled.class).isPrimary()) {
-                        sb.append(getKeyValueAppend(field, obj));
-                    }
-                }
-            }
-            return sb.toString();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return "";
+    boolean deleteObject(Object obj,  SQLiteDatabase database, String[] whereKey, String[] whereValue) {
+        String tableName = obj.getClass().getSimpleName();
+        return  database.delete(tableName, getSelection(whereKey), whereValue) != -1;
     }
 
     //生成更新数据sql语句 更新的关键字是primary key
@@ -103,7 +119,7 @@ class SqlBuilder {
                         primaryKey = field.getName();
                         Object keyObj = field.get(obj);
                         primaryValue = String.valueOf(field.get(obj));
-                        if (keyObj.getClass() == String.class){
+                        if (keyObj.getClass() == String.class) {
                             primaryValue = String.format("\"%s\"", primaryValue);
                         }
                     }
@@ -121,14 +137,14 @@ class SqlBuilder {
 
     //获取键值对文字
     private String getKeyValueAppend(Field field, Object obj) throws IllegalAccessException {
-        Class clazz = field.get(obj).getClass();
+        Class clazz = field.getType();
         StringBuilder sb = new StringBuilder();
         sb.append(field.getName())
                 .append(" = ");
         //如果是字符串 sql语句中则需要加上“”
         if (clazz == String.class) {
             sb.append("\"").append(field.get(obj)).append("\"");
-        }else {
+        } else {
             sb.append(field.get(obj));
         }
         return sb.toString();
@@ -136,14 +152,73 @@ class SqlBuilder {
 
     //获取插入值文字
     private String getValueAppend(Field field, Object obj) throws IllegalAccessException {
-        Class clazz = field.get(obj).getClass();
+        Class clazz = field.getType();
         StringBuilder sb = new StringBuilder();
         //如果是字符串 sql语句中则需要加上“”
         if (clazz == String.class) {
             sb.append("\"").append(field.get(obj)).append("\"");
-        }else {
+        } else {
             sb.append(field.get(obj));
         }
         return sb.toString();
+    }
+
+    private void putValues(ContentValues contentValues, Object obj, Field field) throws IllegalAccessException {
+        if (isString(field.getType())) {
+            contentValues.put(field.getName(), String.valueOf(field.get(obj)));
+        } else if (isInteger(field.getType())) {
+            contentValues.put(field.getName(), (Integer) field.get(obj));
+        } else if (isLong(field.getType())) {
+            contentValues.put(field.getName(), (Long) field.get(obj));
+        } else if (isBoolean(field.getType())) {
+            contentValues.put(field.getName(), (Boolean) field.get(obj));
+        } else if (isFloat(field.getType())) {
+            contentValues.put(field.getName(), (Float) field.get(obj));
+        }
+    }
+
+    private boolean isInteger(Class<?> clazz) {
+        return clazz == int.class ||
+                clazz == Integer.class ||
+                clazz == short.class ||
+                clazz == Short.class ||
+                clazz == Byte.class ||
+                clazz == byte.class;
+    }
+
+    private boolean isLong(Class<?> clazz) {
+        return clazz == long.class ||
+                clazz == Long.class;
+    }
+
+    private boolean isFloat(Class<?> clazz) {
+        return clazz == Float.class ||
+                clazz == float.class ||
+                clazz == Double.class ||
+                clazz == double.class;
+    }
+
+    private boolean isString(Class<?> clazz) {
+        return clazz == String.class;
+    }
+
+    private boolean isBoolean(Class<?> clazz) {
+        return clazz == boolean.class ||
+                clazz == Boolean.class;
+    }
+
+    private String getSelection(String[] whereKey){
+        StringBuilder selection = new StringBuilder();
+        if (whereKey != null){
+            for (int i = 0; i<whereKey.length;i++) {
+                if (i < whereKey.length - 1){
+                    selection.append(String.format("%s=?", whereKey[i])).append(" AND ");
+                }else{
+                    selection.append(String.format("%s=?", whereKey[i]));
+                }
+
+            }
+        }
+        return selection.toString();
     }
 }

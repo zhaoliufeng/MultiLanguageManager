@@ -1,8 +1,7 @@
 package com.we_smart.sqldao;
 
 import android.database.Cursor;
-import android.database.SQLException;
-import android.util.SparseArray;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.we_smart.sqldao.Annotation.DBFiled;
 
@@ -18,36 +17,49 @@ import java.util.List;
 public class BaseDAO<T> {
 
     private Class<T> mClazz;
+    private T mObj;
 
-    public BaseDAO(Class<T> clazz) {
+    protected BaseDAO(Class<T> clazz) {
         this.mClazz = clazz;
-        exeSql(SqlBuilder.getInstance().createTable(mClazz));
+    }
+
+    /**
+     * 新建表 表名是当前实体类的类名
+     */
+    public void createTable(SQLiteDatabase database) {
+        database.execSQL(SqlBuilder.getInstance().createTable(mClazz));
     }
 
     //增
-    public boolean insert(T obj) {
-        return exeSql(SqlBuilder.getInstance().insertObject(obj));
+    protected boolean insert(T obj) {
+        return SqlBuilder.getInstance().insertObject(obj,
+                DBHelper.getInstance().openDatabase());
     }
 
     //删
-    public boolean delete(T obj) {
-        return exeSql(SqlBuilder.getInstance().deleteObject(obj));
+    protected boolean delete(T obj, String[] whereKey, String[] whereValue) {
+        return SqlBuilder.getInstance().deleteObject(obj,
+                DBHelper.getInstance().openDatabase(),
+                whereKey, whereValue);
     }
 
-    //改
-    public boolean update(T obj) {
-        return exeSql(SqlBuilder.getInstance().updateObject(obj));
+    //删
+    protected BaseDAO delete(T obj) {
+        mObj = obj;
+        return this;
+    }
+
+    protected boolean update(T obj, String[] whereKey, String[] whereValue) {
+        return SqlBuilder.getInstance().updateObject(obj,
+                DBHelper.getInstance().openDatabase(),
+                whereKey, whereValue);
     }
 
     //查
-    public List<T> query() {
-        return query(null, null);
-    }
-
-    public List<T> query(String whereKey, String whereValue) {
+    protected List<T> query(String[] whereKey, String[] whereValue) {
+        List<T> list = new ArrayList<>();
         try {
             Cursor cursor = getQueryCursor(whereKey, whereValue);
-            List<T> list = new ArrayList<>();
             Field fields[] = mClazz.getFields();
             Field dbFields[] = new Field[cursor.getColumnCount()];
             //过滤不是数据库字段的属性
@@ -58,7 +70,7 @@ public class BaseDAO<T> {
                 }
             }
             int index[] = new int[cursor.getColumnCount()];
-            for (int i = 0; i < dbFields.length; i++){
+            for (int i = 0; i < dbFields.length; i++) {
                 index[i] = cursor.getColumnIndex(dbFields[i].getName());
             }
 
@@ -70,34 +82,25 @@ public class BaseDAO<T> {
                 }
                 list.add((T) obj);
             }
+            cursor.close();
             return list;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return list;
     }
 
-    /**
-     * 执行sql指令
-     *
-     * @param sql sql指令
-     * @return 是否操作成功
-     */
-    private boolean exeSql(String sql) {
-        try {
-            DBHelper.getInstance().openDatabase().execSQL(sql);
-        } catch (SQLException se) {
-            return false;
-        }
-        return true;
+    //判断某个值是否存在
+    public boolean isExists(String key, String value) {
+        return query(new String[]{key}, new String[]{value}).size() != 0;
     }
 
-    private Cursor getQueryCursor(String whereKey, String whereValue) {
+    private Cursor getQueryCursor(String[] whereKey, String[] whereValue) {
         return DBHelper.getInstance().openDatabase().query(
                 mClazz.getSimpleName(),
                 null,
-                whereKey == null ? null : String.format("%s=?", whereKey),
-                whereValue == null ? null : new String[]{whereValue},
+                whereKey == null ? null : getSelection(whereKey),
+                whereValue,
                 null,
                 null,
                 null);
@@ -110,9 +113,28 @@ public class BaseDAO<T> {
         } else if (clazz == Integer.class ||
                 clazz == int.class) {
             field.set(obj, cursor.getInt(index));
-        }else if (clazz == Boolean.class ||
-                clazz == boolean.class){
+        } else if (clazz == Boolean.class ||
+                clazz == boolean.class) {
             field.set(obj, cursor.getInt(index) != 0);
+        } else if (clazz == Long.class ||
+                clazz == long.class) {
+            field.set(obj, cursor.getLong(index));
         }
+    }
+
+    //获取查询时的AND字符串
+    private String getSelection(String[] whereKey) {
+        StringBuilder selection = new StringBuilder();
+        if (whereKey != null) {
+            for (int i = 0; i < whereKey.length; i++) {
+                if (i < whereKey.length - 1) {
+                    selection.append(String.format("%s=?", whereKey[i])).append(" AND ");
+                } else {
+                    selection.append(String.format("%s=?", whereKey[i]));
+                }
+
+            }
+        }
+        return selection.toString();
     }
 }

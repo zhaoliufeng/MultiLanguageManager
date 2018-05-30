@@ -6,14 +6,16 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
 
-        String sql = SqlBuilder.getInstance().createTable(TestBean.class);
-        TestBean bean = new TestBean();
-        System.out.println(sql);
-        bean.id = "1";
-        bean.name = "aa";
-        bean.boo = true;
-        System.out.println(SqlBuilder.getInstance().insertObject(bean));
-        System.out.println(SqlBuilder.getInstance().deleteObject(bean));
-        System.out.println(SqlBuilder.getInstance().updateObject(bean));
+//        String sql = SqlBuilder.getInstance().createTable(TestBean.class);
+//        TestBean bean = new TestBean();
+//        System.out.println(sql);
+//        bean.id = "1";
+//        bean.name = "aa";
+//        bean.boo = true;
+//        System.out.println(SqlBuilder.getInstance().insertObject(bean));
+//        System.out.println(SqlBuilder.getInstance().deleteObject(bean));
+//        System.out.println(SqlBuilder.getInstance().updateObject(bean));
+        Integer i = -129, i1 = -129;
+        System.out.println(i == i1);
     }
 }

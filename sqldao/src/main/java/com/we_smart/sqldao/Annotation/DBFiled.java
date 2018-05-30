@@ -15,6 +15,8 @@ import java.lang.annotation.Target;
 public @interface DBFiled {
     //是否是主键
     boolean isPrimary() default false;
+    //是否自动递增
+    boolean isAutoIncrement() default false;
     //是否是长文本
     boolean isText() default false;
 }

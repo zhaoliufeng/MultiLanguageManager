@@ -1,35 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center"
     android:background="#000"
+    android:gravity="center"
     android:orientation="vertical">
 
     <View
         android:id="@+id/view_color"
-        android:layout_marginBottom="20dp"
-        android:background="@color/colorPrimary"
         android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:layout_height="50dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/tv_process"
-        android:text="0%"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="0%" />
 
     <com.we_smart.customview.seekbar.CustomSeekBar
         android:id="@+id/seek_bar"
-        app:process_bg_color="#fff"
-        app:process_color="#6000"
-        app:thumb_color="#CBCBCB"
-        app:process_bg_height="10dp"
-        app:process_height="10dp"
-        app:thumb_radius="10dp"
         android:layout_width="300dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:process_bg_color="#fff"
+        app:process_bg_height="10dp"
+        app:process_color="#6000"
+        app:process_height="10dp"
+        app:thumb_color="#CBCBCB"
+        app:thumb_radius="10dp" />
+
+    <com.we_smart.customview.seekbar.CustomSeekBar
+        android:id="@+id/seek_bar_2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:process_bg_color="#fff"
+        app:process_bg_height="10dp"
+        app:process_color="#6000"
+        app:process_height="10dp"
+        app:thumb_color="#CBCBCB"
+        app:thumb_radius="10dp" />
 
     <Button
         android:id="@+id/btn_set_process"
@@ -40,14 +52,30 @@
         android:textAllCaps="false" />
 
     <com.we_smart.customview.switchbar.CustomSwitchBar
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        app:stroke_color="#6fff"
         app:stroke_width="1dp"
-        app:thumb_margin="2dp"
-        app:text_size="15sp"
+        app:text_color="@color/colorAccent"
         app:text_left="彩光模式"
         app:text_right="暖光模式"
-        app:stroke_color="#6fff"
-        app:text_color="@color/colorAccent"
-        android:layout_width="300dp"
-        android:layout_height="40dp" />
+        app:text_size="15sp"
+        app:thumb_margin="2dp" />
+
+    <com.we_smart.customview.ThemeImageView
+        android:id="@+id/tiv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:res_name="img"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/img" />
+
+    <Button
+        android:id="@+id/btn_change_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="theme"
+        android:textAllCaps="false" />
 
 </LinearLayout>

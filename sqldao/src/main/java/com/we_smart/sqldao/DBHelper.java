@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 
 public class DBHelper {
-
     //操作原子锁 判断数据库是否空闲
     private AtomicBoolean mDataBaseFree = new AtomicBoolean(true);
     private static SQLiteDatabase mDatabase;
@@ -49,5 +48,4 @@ public class DBHelper {
             mDatabase.close();
         }
     }
-
 }

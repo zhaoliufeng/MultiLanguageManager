@@ -15,7 +15,7 @@ public class BeanDAO extends BaseDAO<SqlTestBean> {
         super(SqlTestBean.class);
     }
 
-    public List<SqlTestBean> getListById(int id){
-        return query("groupId", String.valueOf(id));
+    public List<SqlTestBean> getListById(int id, int groupId){
+        return query(new String[]{"id", "groupId"}, new String[]{String.valueOf(id), String.valueOf(groupId)});
     }
 }

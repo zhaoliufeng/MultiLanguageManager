@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.we_smart.customview.Theme;
+import com.we_smart.customview.ThemeImageView;
 import com.we_smart.customview.seekbar.CustomSeekBar;
 import com.we_smart.customview.seekbar.OnSeekBarDragListener;
 import com.we_smart.permissions.PermissionsListener;
@@ -34,19 +36,23 @@ public class PermissionActivity extends AppCompatActivity {
 
     private PermissionsManager permissionsManager;
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    private CustomSeekBar seekBar;
-    private Button btnRandom;
+    private CustomSeekBar seekBar, seekBar2;
+    private Button btnRandom, btnTheme;
     private View colorView;
     private TextView tvProcess;
+    private ThemeImageView mThemeImgageView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission);
         seekBar = findViewById(R.id.seek_bar);
+        seekBar2 = findViewById(R.id.seek_bar_2);
         btnRandom = findViewById(R.id.btn_set_process);
+        btnTheme = findViewById(R.id.btn_change_theme);
         colorView = findViewById(R.id.view_color);
         tvProcess = findViewById(R.id.tv_process);
+        mThemeImgageView = findViewById(R.id.tiv);
 
         final Color color = new Color();
         seekBar.setOnSeekBarDragListener(new OnSeekBarDragListener() {
@@ -86,6 +92,7 @@ public class PermissionActivity extends AppCompatActivity {
                     color.b = 255;
                 }
                 colorView.setBackgroundColor(android.graphics.Color.argb(255, color.r, color.g, color.b));
+                seekBar2.setColor(android.graphics.Color.rgb(color.r, color.g, color.b));
             }
 
             @Override
@@ -102,11 +109,21 @@ public class PermissionActivity extends AppCompatActivity {
                 seekBar.setProcessWithAnimation(random);
             }
         });
+
+        btnTheme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mThemeImgageView.getTheme() == Theme.redTheme){
+                    mThemeImgageView.changeTheme(Theme.defaultTheme);
+                }else {
+                    mThemeImgageView.changeTheme(Theme.redTheme);
+                }
+            }
+        });
         int[] coloursColors = new int[]{
                 0xFFFF0000, 0xFFFF7F00, 0xFFFFFF00, 0xFF7FFF00,
                 0xFF00FF00, 0xFF00FF7F, 0xFF00FFFF, 0xFF007FFF,
-                0xFF0000FF, 0xFF7F00FF, 0xFFFF00FF, 0xFFFF007F,
-                0xFFFF0000};
+                0xFF0000FF, 0xFF7F00FF, 0xFFFF00FF};
         seekBar.setProcessLinearBgShader(coloursColors);
         permissionsManager = new PermissionsManager(this, permissions);
         permissionsManager.checkPermissions(new PermissionsListener() {
@@ -128,6 +145,55 @@ public class PermissionActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 设置颜色确定圆点位置
+     *
+     * @param r 红
+     * @param g 绿
+     * @param b 蓝
+     */
+    public int setColor(int r, int g, int b) {
+        int process = 0;
+        //重新给rgb赋值 赋予能够在色盘显示的颜色
+        int tempR = r;
+        int tempG = g;
+        int tempB = b;
+        if (r > tempG && r > tempB)
+            r = 255;
+        if (r < tempG && r < tempB)
+            r = 0;
+        if (g > tempR && g > tempB)
+            g = 255;
+        if (g < tempR && g < tempB)
+            g = 0;
+        if (b > tempR && b > tempG)
+            b = 255;
+        if (b < tempR && b < tempG)
+            b = 0;
+
+        // FF XX 00
+        if (r == 255 && b == 0) {
+            process = (int) (g / 12.75f);
+        }
+        // XX FF 00
+        if (g == 255 && b == 0) {
+            process = (int) ((255 - r) / 12.75f) + 20;
+        }
+        // 00 FF XX
+        if (r == 0 && g == 255) {
+            process = (int) (b / 12.75f) + 40;
+        }
+        //00 XX FF
+        if (r == 0 && b == 255) {
+            process = (int) ((255 - g) / 12.75f) + 60;
+        }
+        // XX 00 FF
+        if (g == 0 && b == 255) {
+            process = (int) (r / 12.75f) + 80;
+        }
+        return process;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -139,10 +205,10 @@ public class PermissionActivity extends AppCompatActivity {
                         deniedCount++;
                     }
                 }
-                if (deniedCount != 0){
+                if (deniedCount != 0) {
                     permissionsManager.showDialogTipUserGoToAppSettting("存储权限不可用", "需要内存读写权限来存储信息");
-                }else {
-                   //do something...
+                } else {
+                    //do something...
                 }
             }
         }

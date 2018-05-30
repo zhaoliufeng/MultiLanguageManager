@@ -18,7 +18,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.we_smart.customview.R;
 
 /**
- *  Created by zhaol on 2018/4/16.
+ * Created by zhaol on 2018/4/16.
  */
 
 public class CustomSeekBar extends View implements View.OnTouchListener {
@@ -31,6 +31,9 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
     private int mHeight;
     //当前进度 0 - 100;
     private int mCurrProcess;
+    private int[] mBgColors;
+    //判断是否经过测量
+    private boolean hasBeMeasured;
     private OnSeekBarDragListener mSeekBarDragListener = new OnSeekBarDragListener() {
         @Override
         public void startDrag() {
@@ -97,9 +100,9 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
         mThumbColor = a.getColor(R.styleable.CustomSeekBar_thumb_color, Color.GRAY);
         mProcessColor = a.getColor(R.styleable.CustomSeekBar_process_color, Color.BLACK);
         mProcessBgColor = a.getColor(R.styleable.CustomSeekBar_process_bg_color, Color.WHITE);
-        mProcessBgHeight = (int) a.getDimension(R.styleable.CustomSeekBar_process_bg_height, DEFAULT_HEIGHT/2);
+        mProcessBgHeight = (int) a.getDimension(R.styleable.CustomSeekBar_process_bg_height, DEFAULT_HEIGHT / 2);
         mProcessHeight = (int) a.getDimension(R.styleable.CustomSeekBar_process_height, mProcessBgHeight);
-        mThumbWidth = (int) a.getDimension(R.styleable.CustomSeekBar_thumb_radius, DEFAULT_HEIGHT/2) * 2;
+        mThumbWidth = (int) a.getDimension(R.styleable.CustomSeekBar_thumb_radius, DEFAULT_HEIGHT / 2) * 2;
 
         mThumbX = mThumbWidth / 2;
         mProcessStartX = mThumbWidth / 2;
@@ -147,7 +150,7 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
 
         if (widthMode == MeasureSpec.AT_MOST &&
                 heightMode == MeasureSpec.AT_MOST) {
-                mHeight = mThumbWidth;
+            mHeight = mThumbWidth;
         }
 
         if (widthMode == MeasureSpec.EXACTLY) {
@@ -159,7 +162,25 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
         }
 
         mProcessEndX = mWidth - mThumbWidth / 2;
+
         setMeasuredDimension(mWidth, mHeight);
+        if (!hasBeMeasured &&
+                mBgColors != null &&
+                mBgColors.length >= 2) {
+            hasBeMeasured = true;
+            mProcessBgPaint.setShader(new LinearGradient(
+                    mProcessStartX,
+                    mHeight / 2 - mProcessHeight / 2,
+                    mProcessEndX,
+                    mHeight / 2 + mProcessBgHeight / 2,
+                    mBgColors, null, Shader.TileMode.CLAMP));
+            invalidate();
+        }
+
+        if (mCurrProcess != 0) {
+            mThumbX = (mCurrProcess / 100.0f) * (mProcessEndX - mProcessStartX) + mProcessStartX;
+            invalidate();
+        }
     }
 
     @Override
@@ -243,7 +264,7 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
                 } else {
                     mThumbX = x;
                 }
-                mCurrProcess = (int) ((mThumbX - mProcessStartX)/(mProcessEndX - mProcessStartX) * 100);
+                mCurrProcess = (int) ((mThumbX - mProcessStartX) / (mProcessEndX - mProcessStartX) * 100);
                 invalidate();
                 mSeekBarDragListener.dragging(mCurrProcess);
                 break;
@@ -256,6 +277,7 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
 
     /**
      * 获取进度
+     *
      * @return 进度
      */
     public int getProcess() {
@@ -264,12 +286,13 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
 
     /**
      * 设置进度
+     *
      * @param process 当前进度
      */
-    public void setProcess(int process){
-        synchronized (this){
-            this.mCurrProcess = process;
-            this.mThumbX = (mCurrProcess / 100.0f) * (mProcessEndX - mProcessStartX) + mProcessStartX;
+    public void setProcess(final int process) {
+        synchronized (this) {
+            mCurrProcess = process;
+            mThumbX = (mCurrProcess / 100.0f) * (mProcessEndX - mProcessStartX) + mProcessStartX;
             invalidate();
             mSeekBarDragListener.stopDragging(mCurrProcess);
         }
@@ -277,10 +300,11 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
 
     /**
      * 带动画设置当前进度
+     *
      * @param process 当前进度
      */
-    public void setProcessWithAnimation(int process){
-        synchronized (this){
+    public void setProcessWithAnimation(int process) {
+        synchronized (this) {
             this.mCurrProcess = process;
             ValueAnimator animator = ValueAnimator.ofFloat(this.mThumbX,
                     (mCurrProcess / 100.0f) * (mProcessEndX - mProcessStartX) + mProcessStartX);
@@ -292,7 +316,7 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
                 public void onAnimationUpdate(ValueAnimator animation) {
                     mThumbX = (float) animation.getAnimatedValue();
                     postInvalidate();
-                    mSeekBarDragListener.dragging((int) ((mThumbX - mProcessStartX)/(mProcessEndX - mProcessStartX) * 100));
+                    mSeekBarDragListener.dragging((int) ((mThumbX - mProcessStartX) / (mProcessEndX - mProcessStartX) * 100));
                 }
             });
             mSeekBarDragListener.stopDragging(this.mCurrProcess);
@@ -302,7 +326,7 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
     /**
      * 设置滑块颜色
      */
-    public void setThumbColor(int color){
+    public void setThumbColor(int color) {
         this.mThumbColor = color;
         this.mThumbPaint.setColor(color);
         invalidate();
@@ -311,14 +335,15 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
     /**
      * 设置进度条颜色
      */
-    public void setProcessColor(int color){
+    public void setProcessColor(int color) {
         this.mProcessColor = color;
         this.mProcessPaint.setColor(color);
         invalidate();
     }
 
-    public void setProcessLinearBgShader(int[] doughnutColors){
-        this.mProcessBgPaint.setShader(new LinearGradient(
+    public void setProcessLinearBgShader(final int[] doughnutColors) {
+        mBgColors = doughnutColors;
+        mProcessBgPaint.setShader(new LinearGradient(
                 mProcessStartX,
                 mHeight / 2 - mProcessHeight / 2,
                 mProcessEndX,
@@ -330,7 +355,7 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
     /**
      * 设置背景进度条颜色
      */
-    public void setProcessBgColor(int color){
+    public void setProcessBgColor(int color) {
         this.mProcessBgColor = color;
         this.mProcessBgPaint.setColor(color);
         invalidate();
@@ -338,5 +363,59 @@ public class CustomSeekBar extends View implements View.OnTouchListener {
 
     public void setOnSeekBarDragListener(OnSeekBarDragListener onSeekBarDragListener) {
         this.mSeekBarDragListener = onSeekBarDragListener;
+    }
+
+    public void setColor(int rgb) {
+        setProcess(setColor(Color.red(rgb),
+                Color.green(rgb),
+                Color.blue(rgb)));
+    }
+
+    /**
+     * 设置颜色确定X位置
+     *
+     * @param r 红
+     * @param g 绿
+     * @param b 蓝
+     */
+    private int setColor(int r, int g, int b) {
+        //重新给rgb赋值 赋予能够在色带显示的颜色 rgb 三位中两位分别是 255 和 0
+        int tempR = r;
+        int tempG = g;
+        int tempB = b;
+        if (r > tempG && r > tempB)
+            r = 255;
+        if (r < tempG && r < tempB)
+            r = 0;
+        if (g > tempR && g > tempB)
+            g = 255;
+        if (g < tempR && g < tempB)
+            g = 0;
+        if (b > tempR && b > tempG)
+            b = 255;
+        if (b < tempR && b < tempG)
+            b = 0;
+
+        // FF XX 00
+        if (r == 255 && b == 0) {
+            return (int) (g / 12.75f);
+        }
+        // XX FF 00
+        if (g == 255 && b == 0) {
+           return  (int) ((255 - r) / 12.75f) + 20;
+        }
+        // 00 FF XX
+        if (r == 0 && g == 255) {
+            return (int) (b / 12.75f) + 40;
+        }
+        //00 XX FF
+        if (r == 0 && b == 255) {
+            return (int) ((255 - g) / 12.75f) + 60;
+        }
+        // XX 00 FF
+        if (g == 0 && b == 255) {
+            return (int) (r / 12.75f) + 80;
+        }
+        return 0;
     }
 }

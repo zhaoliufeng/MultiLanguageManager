@@ -8,14 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.we_smart.sqldao.BaseDAO;
 import com.we_smart.sqldao.DBHelper;
-import com.we_smart.sqldao.DBOpenHelper;
 import com.we_smart.test.model.SqlTestBean;
 
 import java.util.ArrayList;
@@ -45,26 +42,26 @@ public class SqlActivity extends AppCompatActivity {
         mListView.setAdapter(listAdapter);
         mListView.setLayoutManager(new LinearLayoutManager(this));
 
-        DBHelper.getInstance().initDBHelper(new DBOpenHelper(this, "test.db"));
+//        DBHelper.getInstance().initDBHelper(new DBOpenHelper(this, "test.db"));
         dao = new BeanDAO();
     }
 
     public void onInsertClick(View view) {
-        if (dao.insert(packData())) {
-            toast("插入成功");
-        }
+//        if (dao.insert(packData())) {
+//            toast("插入成功");
+//        }
     }
 
     public void onDeleteClick(View view) {
-        if (dao.delete(packData())) {
-            toast("删除成功");
-        }
+//        if (dao.delete(packData())) {
+//            toast("删除成功");
+//        }
     }
 
     public void onUpdateClick(View view) {
-        if (dao.update(packData())) {
-            toast("更新成功");
-        }
+//        if (dao.update(packData())) {
+//            toast("更新成功");
+//        }
     }
 
     private void toast(String s) {
@@ -83,12 +80,13 @@ public class SqlActivity extends AppCompatActivity {
     public void onQueryClick(View view) {
         List<SqlTestBean> list;
         if (mEdtGroupId.getText().toString().trim().isEmpty()) {
-            list = dao.query();
+//            list = dao.query();
         } else {
-            list = dao.getListById(Integer.parseInt(mEdtGroupId.getText().toString().trim()));
+            list = dao.getListById(Integer.parseInt(mEdtId.getText().toString().trim()),
+                    Integer.parseInt(mEdtGroupId.getText().toString().trim()));
         }
         data.clear();
-        data.addAll(list);
+//        data.addAll(list);
         listAdapter.notifyDataSetChanged();
     }
 
