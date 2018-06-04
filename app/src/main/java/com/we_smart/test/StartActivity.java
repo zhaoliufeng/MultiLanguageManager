@@ -33,4 +33,8 @@ public class StartActivity  extends AppCompatActivity {
     public void onSQLClick(View view) {
         startActivity(new Intent(this, SqlActivity.class));
     }
+
+    public void onRxClick(View view) {
+        startActivity(new Intent(this, RxActivity.class));
+    }
 }

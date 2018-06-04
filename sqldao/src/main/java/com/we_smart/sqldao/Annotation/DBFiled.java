@@ -19,4 +19,5 @@ public @interface DBFiled {
     boolean isAutoIncrement() default false;
     //是否是长文本
     boolean isText() default false;
+    String nameInDb() default "";
 }

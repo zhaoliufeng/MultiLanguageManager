@@ -20,7 +20,8 @@
         </activity>
         <activity android:name=".SpeechActivity" />
         <activity android:name=".PermissionActivity" />
-        <activity android:name=".SqlActivity"></activity>
+        <activity android:name=".SqlActivity"/>
+        <activity android:name=".RxActivity"/>
     </application>
 
 </manifest>

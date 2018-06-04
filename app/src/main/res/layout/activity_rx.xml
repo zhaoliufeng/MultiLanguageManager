@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/send_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="30dp"
+        android:text="发送： " />
+
+    <TextView
+        android:id="@+id/send_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/send_title"
+        android:layout_toRightOf="@id/send_title"
+        android:text="发送线程信息" />
+
+    <TextView
+        android:id="@+id/rec_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/send_title"
+        android:layout_below="@id/send_title"
+        android:layout_marginTop="20dp"
+        android:text="接收： " />
+
+    <TextView
+        android:id="@+id/rec_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/rec_title"
+        android:layout_toRightOf="@id/rec_title"
+        android:text="接收线程信息" />
+
+    <Button
+        android:onClick="onStartClick"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentBottom="true"
+        android:text="start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         }else if (currLocale.equals( Locale.TRADITIONAL_CHINESE)){
             mBtnTW.setTextColor(Color.GRAY);
         }
+
     }
 
     public void onEnglishClick(View view) {

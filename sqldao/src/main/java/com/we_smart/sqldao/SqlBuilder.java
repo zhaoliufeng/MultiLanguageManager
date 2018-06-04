@@ -164,16 +164,18 @@ class SqlBuilder {
     }
 
     private void putValues(ContentValues contentValues, Object obj, Field field) throws IllegalAccessException {
+        String nameInDb = field.getAnnotation(DBFiled.class).nameInDb().equals("") ?
+                field.getName() : field.getAnnotation(DBFiled.class).nameInDb();
         if (isString(field.getType())) {
-            contentValues.put(field.getName(), String.valueOf(field.get(obj)));
+            contentValues.put(nameInDb, String.valueOf(field.get(obj)));
         } else if (isInteger(field.getType())) {
-            contentValues.put(field.getName(), (Integer) field.get(obj));
+            contentValues.put(nameInDb, (Integer) field.get(obj));
         } else if (isLong(field.getType())) {
-            contentValues.put(field.getName(), (Long) field.get(obj));
+            contentValues.put(nameInDb, (Long) field.get(obj));
         } else if (isBoolean(field.getType())) {
-            contentValues.put(field.getName(), (Boolean) field.get(obj));
+            contentValues.put(nameInDb, (Boolean) field.get(obj));
         } else if (isFloat(field.getType())) {
-            contentValues.put(field.getName(), (Float) field.get(obj));
+            contentValues.put(nameInDb, (Float) field.get(obj));
         }
     }
 
